@@ -109,31 +109,91 @@ SELECT customername , rfm_recency, rfm_frequency, rfm_monetary,
 
 FROM #rfm
 
--- What products are most often sold together? 
+/* lost customers :- 
+Alpha Cognac
+Amica Models & Co.
+Anna's Decorations, Ltd
+Atelier graphique
+Australian Collectables, Ltd
+Australian Collectors, Co.
+Australian Gift Network, Co
+Auto Assoc. & Cie.
+Auto Canal Petit
+Auto-Moto Classics Inc.
+AV Stores, Co.
+Baane Mini Imports
+Bavarian Collectables Imports, Co.
+Blauer See Auto, Co.
+Boards & Toys Co.
+CAF Imports
+Cambridge Collectables Co.
+Canadian Gift Exchange Network */
 
-SELECT DISTINCT ordernumber, stuff(
+/* big spenders which we cannot loose :-
+Classic Gift Ideas, Inc
+Classic Legends Inc.
+Clover Collections, Co.
+Collectable Mini Designs Co.
+Collectables For Less Inc.
+Corporate Gift Ideas Co.
+Corrida Auto Replicas, Ltd
+Cruz & Sons Co.
+Daedalus Designs Imports
+Danish Wholesale Imports
+Diecast Classics Inc.
+Diecast Collectables
+Double Decker Gift Stores, Ltd
+Dragon Souveniers, Ltd.
+Enaco Distributors
+Euro Shopping Channel
+FunGiftIdeas.com
+Gift Depot Inc.
+Gift Ideas Corp.
+Gifts4AllAges.com
+giftsbymail.co.uk
+Handji Gifts& Co
+Heintze Collectables */
 
-	(SELECT ',' + PRODUCTCODE
-	FROM [dbo].[sales_data_sample] p
-	WHERE ordernumber in 
-		(
+/* new comsumers :- 
+Herkku Gifts
+Iberia Gift Imports, Corp.
+L'ordine Souveniers
+La Corne D'abondance, Co.
+La Rochelle Gifts
+Land of Toys Inc.
+Lyon Souveniers
+Marseille Mini Autos
+Marta's Replicas Co.
+Men 'R' US Retailers, Ltd.
+Microscale Inc.
+Mini Auto Werke
+Mini Caravy
+Mini Classics
+Mini Creations Ltd.
+Mini Gifts Distributors Ltd.
+Mini Wheels Co.
+Motor Mint Distributors Inc.
+Muscle Machine Inc
+Norway Gifts By Mail, Co.*/
 
-			SELECT ordernumber
-			FROM (
-				SELECT ordernumber, count(*) rn
-				FROM [dbo].[sales_data_sample]
-				WHERE status = 'Shipped'
-				GROUP BY ordernumber
-			)m
-			WHERE rn = 3
-		)
-		AND p.ordernumber = s.ordernumber
-		for xml path (''))
+/* loyal customers 
+Online Diecast Creations Co.
+Online Mini Collectables
+Osaka Souveniers Co.
+Oulu Toy Supplies, Inc.
+Petit Auto
+Quebec Home Shopping Network
+Reims Collectables
+Rovelli Gifts
+Royal Canadian Collectables, Ltd.
+Royale Belge
+Salzburg Collectables
+Saveley & Henriot, Co.
+Scandinavian Gift Ideas
+Signal Collectibles Ltd.
+Signal Gift Stores*/
 
-		, 1, 1, '') ProductCodes
 
-FROM [dbo].[sales_data_sample] s
-ORDER BY 2 DESC
 
 -- What city has the highest number of sales in a specific country?
 select city, sum (sales) Revenue
